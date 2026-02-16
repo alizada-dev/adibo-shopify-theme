@@ -1,0 +1,29 @@
+{
+  "name": "adibo-shopify-theme",
+  "version": "1.0.0",
+  "description": "<h1 align=\"center\" style=\"position: relative;\">\r   <br>\r     <img src=\"./assets/shoppy-x-ray.svg\" alt=\"logo\" width=\"200\">\r   <br>\r   Shopify Skeleton Theme\r </h1>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alizada-dev/adibo-shopify-theme.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alizada-dev/adibo-shopify-theme/issues"
+  },
+  "homepage": "https://github.com/alizada-dev/adibo-shopify-theme#readme",
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "autoprefixer": "^10.4.24",
+    "laravel-mix": "^6.0.49",
+    "tailwindcss": "^4.1.18"
+  },
+  "dependencies": {
+    "alpinejs": "^3.15.8"
+  }
+}

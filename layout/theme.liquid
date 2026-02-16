@@ -20,6 +20,9 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
+    {{ 'app.css' | asset_url | stylesheet_tag }}
+    {{ 'app.js' | asset_url | script_tag }}
+
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
