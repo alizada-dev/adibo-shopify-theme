@@ -1,1 +1,84 @@
 @import "tailwindcss";
+
+/* Typography - fonts */
+html,
+body {
+  font-family: var(--font-body--family);
+  font-style: var(--font-body--style);
+  font-weight: var(--font-body--weight);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.heading,
+.rte h1,
+.rte h2,
+.rte h3,
+.rte h4,
+.rte h5,
+.rte h6 {
+  font-family: var(--font-heading--family);
+  font-style: var(--font-heading--style);
+  font-weight: var(--font-heading--weight);
+}
+
+
+/* Typography presets */
+
+h1,
+.text-block.h1>* {
+  font-size: var(--text-h1-size);
+  font-weight: 700;
+  text-transform: var(--text-h1-case);
+  line-height: var(--text-h1-line-height);
+  letter-spacing: var(--text-h1-letter-spacing);
+}
+
+h2,
+.text-block.h2>* {
+  font-size: var(--text-h2-size);
+  font-weight: 700;
+  text-transform: var(--text-h2-case);
+  line-height: var(--text-h2-line-height);
+  letter-spacing: var(--text-h2-letter-spacing);
+}
+
+h3,
+.text-block.h3>* {
+  font-size: var(--text-h3-size);
+  font-weight: 700;
+  text-transform: var(--text-h3-case);
+  line-height: var(--text-h3-line-height);
+  letter-spacing: var(--text-h3-letter-spacing);
+}
+
+h4,
+.text-block.h4>* {
+  font-size: var(--text-h4-size);
+  font-weight: 700;
+  text-transform: var(--text-h4-case);
+  line-height: var(--text-h4-line-height);
+  letter-spacing: var(--text-h4-letter-spacing);
+}
+
+h5,
+.text-block.h5>* {
+  font-size: var(--text-h5-size);
+  font-weight: 700;
+  text-transform: var(--text-h5-case);
+  line-height: var(--text-h5-line-height);
+  letter-spacing: var(--text-h5-letter-spacing);
+}
+
+h6,
+.text-block.h6>* {
+  font-size: var(--text-h6-size);
+  font-weight: 700;
+  text-transform: var(--text-h6-case);
+  line-height: var(--text-h6-line-height);
+  letter-spacing: var(--text-h6-letter-spacing);
+}

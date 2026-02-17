@@ -1,14 +1,56 @@
 {% style %}
   {% # Loads all font variantions with display: swap %}
-  {{ settings.type_primary_font | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {{ settings.type_body_font | font_face: font_display: 'swap' }}
+  {{ settings.type_body_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+
+  {{ settings.type_heading_font | font_face: font_display: 'swap' }}
+  {{ settings.type_heading_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
 
   :root {
-    --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
-    --font-primary--style: {{ settings.type_primary_font.style }};
-    --font-primary--weight: {{ settings.type_primary_font.weight }};
+    /* Font families */
+    --font-body--family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+    --font-body--style: {{ settings.type_body_font.style }};
+    --font-body--weight: {{ settings.type_body_font.weight }};
+
+    --font-heading--family: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+    --font-heading--style: {{ settings.type_heading_font.style }};
+    --font-heading--weight: {{ settings.type_heading_font.weight }};
+
+
+    /* Type presets */
+    --text-paragraph-size: {{ settings.type_size_paragraph }}px;
+    --text-h1-size: {{ settings.type_size_h1 }}px;
+    --text-h1-case: {{ settings.type_case_h1 }};
+    --text-h1-line-height: {{ settings.type_line_height_h1 }};
+    --text-h1-letter-spacing: {{ settings.type_letter_spacing_h1 }};
+    
+    --text-h2-size: {{ settings.type_size_h2 }}px;
+    --text-h2-case: {{ settings.type_case_h2 }};
+    --text-h2-line-height: {{ settings.type_line_height_h2 }};
+    --text-h2-letter-spacing: {{ settings.type_letter_spacing_h2 }};
+    
+    --text-h3-size: {{ settings.type_size_h3 }}px;
+    --text-h3-case: {{ settings.type_case_h3 }};
+    --text-h3-line-height: {{ settings.type_line_height_h3 }};
+    --text-h3-letter-spacing: {{ settings.type_letter_spacing_h3 }};
+    
+    --text-h4-size: {{ settings.type_size_h4 }}px;
+    --text-h4-case: {{ settings.type_case_h4 }};
+    --text-h4-line-height: {{ settings.type_line_height_h4 }};
+    --text-h4-letter-spacing: {{ settings.type_letter_spacing_h4 }};
+    
+    --text-h5-size: {{ settings.type_size_h5 }}px;
+    --text-h5-case: {{ settings.type_case_h5 }};
+    --text-h5-line-height: {{ settings.type_line_height_h5 }};
+    --text-h5-letter-spacing: {{ settings.type_letter_spacing_h5 }};
+    
+    --text-h6-size: {{ settings.type_size_h6 }}px;
+    --text-h6-case: {{ settings.type_case_h6 }};
+    --text-h6-line-height: {{ settings.type_line_height_h6 }};
+    --text-h6-letter-spacing: {{ settings.type_letter_spacing_h6 }}
+
+
+
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin }}px;
     --color-background: {{ settings.background_color }};
