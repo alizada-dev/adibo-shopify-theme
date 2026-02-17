@@ -1,0 +1,167 @@
+<aside
+  class="w-full border-b text-center"
+  style="
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    border-bottom-width: {{ section.settings.divider_width }}px;
+    --announcement-bg: {{ section.settings.background_color }};
+    --announcement-text: {{ section.settings.text_color }};
+  "
+  x-data="
+    {
+      active: 0,
+      total: {{ section.blocks.size }},
+      interval: null,
+      speed: {{ section.settings.speed | times: 1000 }},
+      paused: false,
+      startX: 0,
+
+      next() {
+        this.active = (this.active + 1) % this.total
+      },
+      prev() {
+        this.active = (this.active - 1 + this.total) % this.total
+      },
+
+      startAutoplay() {
+        if (this.total < 2) return
+        this.interval = setInterval(() => {
+          if (!this.paused) this.next()
+        }, this.speed)
+      },
+      stopAutoplay() {
+        clearInterval(this.interval)
+      },
+
+      touchStart(e) {
+        this.startX = e.touches[0].clientX
+      },
+      touchEnd(e) {
+        let diff = this.startX - e.changedTouches[0].clientX
+        if (Math.abs(diff) > 50) {
+          diff > 0 ? this.next() : this.prev()
+        }
+      }
+    }
+  "
+  x-init="startAutoplay()"
+  @mouseenter="paused = true"
+  @mouseleave="paused = false"
+  @touchstart="touchStart($event)"
+  @touchend="touchEnd($event)"
+  class="relative overflow-hidden text-center"
+>
+  <div class="relative overflow-hidden max-w-6xl mx-auto">
+    <div class="absolute inset-0" style="background-color: var(--announcement-bg);"></div>
+
+    <div class="flex transition-transform duration-500">
+      {% content_for 'blocks' %}
+    </div>
+
+    {%- if section.blocks.size > 1 -%}
+      <button
+        @click="prev"
+        class="absolute left-0.5 top-1/2 -translate-y-1/2 cursor-pointer"
+        style="color: var(--announcement-text)"
+      >
+        {%- render 'icon-chevron-left', class: 'w-5' -%}
+      </button>
+
+      <button
+        @click="next"
+        class="absolute right-0.5 top-1/2 -translate-y-1/2 cursor-pointer"
+        style="color: var(--announcement-text);"
+      >
+        {%- render 'icon-chevron-right', class: 'w-5' -%}
+      </button>
+    {%- endif -%}
+  </div>
+</aside>
+
+{% schema %}
+{
+  "name": "t:names.announcement_bar",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "blocks": [
+    {
+      "type": "_announcement"
+    }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "t:settings.scroll_speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "unit": "sec"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "divider_width",
+      "label": "t:settings.divider_thickness",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:options.top",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:options.bottom",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "t:names.announcement_bar",
+      "blocks": [
+        {
+          "type": "_announcement"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

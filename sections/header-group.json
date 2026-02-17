@@ -11,12 +11,40 @@
   "type": "header",
   "name": "t:general.header",
   "sections": {
+    "announcements": {
+      "type": "header-announcements",
+      "settings": {
+        "bg_color": "#000000",
+        "text_color": "#ffffff",
+      },
+      "blocks": {
+        "announcement_1": {
+          "type": "_announcement",
+          "settings": {
+            "text": "<b>Free shipping on orders over £50</b> (excluding diapers and adapted milk)",
+            "font-size": 14
+          }
+        },
+        "announcement_2": {
+          "type": "_announcement",
+          "settings": {
+            "text": "See discounted products here",
+            "font-size": 14
+          }
+        }
+      },
+      "block_order": [
+        "announcement_1",
+        "announcement_2"
+      ]
+    },
     "header": {
       "type": "header",
       "settings": {}
     }
   },
   "order": [
+    "announcements",
     "header"
   ],
 }
