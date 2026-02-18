@@ -1,0 +1,170 @@
+<ul
+  class="header__menu-nav hidden lg:flex lg:items-center lg:space-x-8"
+  style="font-size: {{ block.settings.type_font_primary_size }};"
+  {{ block.shopify_attributes }}>
+  {% for link in block.settings.menu.links %}
+    {%- if link.links != blank -%}
+      <li class="group w-fit!">
+        <a href="{{ link.url }}" class="py-4 uppercase flex gap-1 items-center">
+          <span>
+            {{ link.title }}
+          </span>
+          <span class="flex items-center">
+            {%- render 'icon-caret' -%}
+          </span>
+        </a>
+        <div class="absolute left-0 top-full w-full bg-white hidden text-gray-800 group-hover:block shadow-lg z-50">
+          <ul class="nav__item-submenu max-w-7xl mx-auto px-8 pb-6 pt-2 grid grid-cols-5 gap-6">
+            {% for childlink in link.links %}
+              <li>
+                {%- if childlink.links == blank -%}
+                  <a
+                    class="block py-2 text-lg {% if childlink.current %} active{% endif %}"
+                    href="{{ childlink.url }}"
+                  >
+                    {{ childlink.title | escape }}
+                  </a>
+                {%- else -%}
+                  <ul class="submenu">
+                    <a href="{{ childlink.url }}" class="block py-2 text-lg">
+                      {{ childlink.title }}
+                    </a>
+                    {%- for grandchildlink in childlink.links -%}
+                      <li>
+                        <a
+                          class="text-sm"
+                          href="{{ grandchildlink.url }}"
+                          class="menu-item{% if grandchildlink.current %} active{% endif %}"
+                          {% if childlink.current %}
+                            aria-current="page"
+                          {% endif %}
+                        >
+                          {{ grandchildlink.title | escape }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </li>
+    {%- else -%}
+      <li>
+        <a class="nav__item py-8 uppercase {% if link.current %} active{% endif %}" href="{{ link.url }}">
+          {{ link.title | escape }}
+        </a>
+      </li>
+    {%- endif -%}
+  {% endfor %}
+</ul>
+
+{%- render 'mobile-menu' -%}
+
+{% schema %}
+{
+  "name": "t:names.menu",
+  "tag": null,
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:settings.menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Typography primary"
+    },
+    {
+      "type": "select",
+      "id": "type_font_primary_size",
+      "label": "t:settings.size",
+      "options": [
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "0.875rem"
+    },
+    {
+      "type": "select",
+      "id": "type_case_primary_link",
+      "label": "t:settings.case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none"
+    }
+  ]
+}
+{% endschema %}

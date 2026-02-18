@@ -1,5 +1,36 @@
 @import "tailwindcss";
 
+* {
+  box-sizing: border-box;
+}
+
+/* Header */
+.header__container {
+  display: grid;
+  grid-template-areas: "header-logo header-menu header-icons";
+  grid-template-columns: 1fr 6fr 1fr;
+}
+
+ .header__container .header__logo {
+  grid-area: header-logo;
+}
+
+ .header__container .header__menu {
+  grid-area: header-menu;
+}
+
+ .header__container .header__icons {
+  grid-area: header-icons;
+}
+
+@media (max-width: 1024px) {
+  .main_header .header__container {
+    display: grid;
+    grid-template-areas: "header-menu header-logo header-icons";
+    grid-template-columns: auto 1fr auto;
+  }
+}
+
 /* Typography - fonts */
 html,
 body {

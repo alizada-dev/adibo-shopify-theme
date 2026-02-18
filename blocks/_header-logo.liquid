@@ -1,0 +1,43 @@
+{%- if block.settings.logo != blank -%}
+  <a
+    href="{{ routes.root_url }}"
+    class="header__logo"
+    style="max-width: {{ block.settings.logo_width }}px;"
+    {{ block.shopify_attributes }}
+  >
+    {{ block.settings.logo | image_url: width: block.settings.logo_width | image_tag: loading: 'lazy' }}
+  </a>
+{%- else -%}
+  <a href="{{ routes.root_url }}" class="header__logo-title">
+    {{ shop.name }}
+  </a>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:names.logo",
+  "tag": null,
+  "class": "header-logo",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:content.logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 100
+    }
+  ]
+}
+{% endschema %}

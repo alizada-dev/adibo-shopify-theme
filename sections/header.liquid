@@ -1,66 +1,221 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+<header
+  class="main_header px-4 items-center relative lg:grid"
+  style="
+    border-bottom: {{ section.settings.border_width }}px solid;
+    height: {{ section.settings.header_height }}rem
+  "
+>
+  <div class="header__container mx-auto px-4 grid items-center menu__breakpoint--tablet">
+    <div class="header__logo mx-auto my-1 lg:mr-auto lg:ml-0">
+      {% content_for 'block', type: '_header-logo', id: 'header-logo' %}
+    </div>
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+    <nav class="header__menu flex" x-data>
+      <button class="lg:hidden cursor-pointer" type="button" @click="$dispatch('toggle-menu')">
+        {%- render 'icon-menu' -%}
+      </button>
+
+      {% content_for 'block', type: '_header-menu', id: 'header-menu' %}
+    </nav>
+
+    <div
+      class="header__icons flex justify-end items-center space-x-2 md:space-x-4"
+      x-data="{ cart_count: {{ cart.item_count }} }"
+      @cart-count-updated.window="cart_count = $event.detail"
+    >
+      {%- if section.settings.show_search -%}
+        <button
+          @click="$dispatch('open-modal')"
+          type="button"
+          title="Search button"
+          class="relative cursor-pointer hidden md:flex"
+        >
+          {%- render 'icon-search', class: 'w-6' -%}
+        </button>
+      {%- endif -%}
+
+      {%- if shop.customer_accounts_enabled -%}
+        <div class="relative account-menu-wrapper z-10">
+          <a href="{{ routes.account_url }}" class="header__icon block text-center" title="account link">
+            {% render 'icon-account', class: 'w-6 h-6 mx-auto' %}
+            <span class="sr-only">
+              {%- liquid
+                if customer
+                  echo 'customer.account_fallback' | t
+                else
+                  echo 'customer.account_fallback' | t
+                endif
+              -%}
+            </span>
+          </a>
+        </div>
+      {%- endif -%}
+
+      <button
+        @click="$dispatch('toggle-cart')"
+        type="button"
+        title="Cart button"
+        class="header__icon text-center relative cursor-pointer"
+      >
+        {% render 'icon-cart', class: 'w-6 h-6' %}
+        <span class="sr-only">{{ 'general.cart.cart' | t }}</span>
+        <span
+          x-text="cart_count"
+          class="cart__count text-[10px] min-w-4 min-h-4 absolute grid place-content-center rounded-full -top-3 -right-1 text-white bg-gray-500"
+        >
+          {{ cart.item_count }}
+        </span>
+      </button>
+    </div>
   </div>
-
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
-    {% endif %}
-
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
-
-      {{ 'icon-cart.svg' | inline_asset_content }}
-    </a>
+  <div class="mobile-secondary-menu px-4 lg:hidden">
+    <ul class="flex text-sm items-center gap-2 w-full overflow-x-scroll no-scrollbar justify-start sm:justify-center">
+      <li class="shrink-0">What's new</li>
+      <li class="shrink-0">Best sellers</li>
+      <li class="shrink-0">Food</li>
+      <li class="shrink-0">Laundry</li>
+      <li class="shrink-0">Shop all</li>
+    </ul>
   </div>
 </header>
 
-{% stylesheet %}
-  header {
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    {% if settings.logo %}
+      "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
+    {% endif %}
+    "url": {{ request.origin | append: page.url | json }}
   }
-  header a {
-    position: relative;
-    text-decoration: none;
-    color: var(--color-foreground);
+</script>
+
+{% unless request.design_mode %}
+  <script type="module">
+    import { hydrate } from '@theme/section-hydration';
+    const url = new URL(window.location.href);
+    url.searchParams.delete('page');
+    hydrate('{{ section.id }}', url);
+  </script>
+{% endunless %}
+
+{%- stylesheet -%}
+  .header-section {
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
   }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
+
+  .no-scrollbar {
+    scrollbar-width: none;
   }
-  header svg {
-    width: 2rem;
+
+  .header__logo {
+    @media (max-width: 1024px) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
   }
-  header .header__menu,
-  header .header__icons {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
+{%- endstylesheet -%}
 
 {% schema %}
 {
-  "name": "t:general.header",
+  "name": "t:names.header",
+  "tag": "header",
+  "class": "header-section",
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "range",
+      "id": "header_height",
+      "label": "t:settings.height",
+      "unit": "rem",
+      "min": 3,
+      "max": 6,
+      "step": 0.5,
+      "default": 4.5
+    },
+    {
+      "type": "header",
+      "content": "t:content.logo"
+    },
+    {
+      "type": "header",
+      "content": "t:content.customer_account"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:content.manage_customer_accounts"
+    },
+    {
+      "type": "header",
+      "content": "t:content.search"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "t:settings.search_icon",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "search_position",
+      "label": "t:settings.search_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:options.left"
+        },
+        {
+          "value": "right",
+          "label": "t:options.right"
+        }
+      ],
+      "default": "right",
+      "visible_if": "{{ section.settings.show_search }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "t:settings.border_width",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Text transform",
+      "options": [
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        }
+      ],
+      "default": "uppercase"
     }
-  ]
+  ],
+  "presets": []
 }
 {% endschema %}
